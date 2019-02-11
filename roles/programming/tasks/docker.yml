@@ -10,4 +10,5 @@
   systemd: name=docker enabled=yes state=started
 
 - name: Add user to system docker group
+  become: yes
   user: name=leonardo groups=docker append=yes

@@ -7,8 +7,18 @@
 
 - name: Install Nvidia
   become: yes
-  pacman: name=nvidia
+  pacman: name=nvidia-340xx-utils
 
 - name: Install Plasma KDE
   become: yes
   pacman: name=plasma-desktop
+
+- name: Install KDE tools
+  become: yes
+  pacman:
+    name:
+      - plasma-pa
+      - acpi
+      - acpid
+      - powerdevil
+      - kscreen
