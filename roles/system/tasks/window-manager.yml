@@ -1,0 +1,14 @@
+- name: Install Xorg and tools
+  become: yes
+  pacman:
+    name:
+      - xorg-server
+      - xorg-xinit
+
+- name: Install Nvidia
+  become: yes
+  pacman: name=nvidia
+
+- name: Install Plasma KDE
+  become: yes
+  pacman: name=plasma-desktop
