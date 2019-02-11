@@ -13,4 +13,3 @@
 - include: playerctl.yml
 - include: window-manager.yml
 - include: look-and-feel.yml
-- include: dotfiles.yml
