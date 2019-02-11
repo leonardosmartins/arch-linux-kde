@@ -18,7 +18,5 @@
   pacman:
     name:
       - plasma-pa
-      - acpi
-      - acpid
       - powerdevil
       - kscreen
