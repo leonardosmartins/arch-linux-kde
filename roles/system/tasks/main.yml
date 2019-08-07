@@ -11,4 +11,5 @@
 - include: fonts.yml
 - include: file-manager.yml
 - include: playerctl.yml
+- include: time.yml
 - include: window-manager.yml
