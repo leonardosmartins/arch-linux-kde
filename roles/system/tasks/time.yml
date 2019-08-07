@@ -1,0 +1,11 @@
+- name: Install NTP
+  become: yes
+  pacman: name=ntp
+
+- name: Enable NTPD
+  become: yes
+  systemd: name=ntpd enabled=yes state=started
+
+- name: Enable NTPDATE
+  become: yes
+  systemd: name=ntpdate enabled=yes state=started  
