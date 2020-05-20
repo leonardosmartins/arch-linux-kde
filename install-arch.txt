@@ -1,3 +1,6 @@
+## Enable NTP
+timedatactl set-ntp true
+
 ## Create partitions
 cfdisk /dev/sda
 
@@ -7,12 +10,6 @@ mkfs.ext4 /dev/sdaX
 ## Format the efi partition in efi systems
 mkfs.fat -F32 /dev/sdaX
 
-## Make a swap file in the swap partition
-mkswap /dev/sdaX
-
-## Activate the swap of the swap partition
-swapon /dev/sdaX
-
 ## Connect on wifi
 wifi-menu <network_name>
 
@@ -20,19 +17,10 @@ wifi-menu <network_name>
 mount /dev/sdaX /mnt
 
 ## We need to use pacman to put the base system in our mount point
-pacstrap /mnt base base-devel
+pacstrap /mnt base base-devel linux linux-firmware nano
 
-## Enter in the mounted driver
-arch-chroot /mnt
-
-## Create EFI directory
-mkdir /boot/efi
-
-## Exit from chroot environment
-exit
-
-## Mount efi patition in an efi directory
-mount /dev/sdaX /mnt/boot/efi
+## Generate fstab file based on the hard drive - informations about the partitions in the hard drive
+genfstab -U -p /mnt >> /mnt/etc/fstab
 
 ## To set things to configurate the system before restart we are going to enter in the system partition
 arch-chroot /mnt
@@ -57,7 +45,10 @@ KEYMAP=br-abnt2
 echo <your_hostname> > /etc/hostname
 
 ## Install necessary packages for wifi connection
-pacman -S iw dialog wpa_supplicant
+pacman -S iw dialog wpa_supplicant networkmanager
+
+## Enable NetworkManager service
+systemctl enable NetworkManager
 
 ## Create a password to the root user
 passwd
@@ -78,13 +69,16 @@ nano /etc/pacman.conf
 pacman -Syu
 
 ## Install the bootloader (grub) and efi manager
-pacman -S efibootmgr os-prober grub-bios
+pacman -S grub efibootmgr 
+
+## Create EFI directory
+mkdir /boot/efi
+
+## Mount efi patition in an efi directory
+mount /dev/sdaX /boot/efi
 
 ## Configure grub to use the current hard drive
-grub-install /dev/sda
-
-## Generate an init file which grub uses to load linux
-mkinitcpio -p linux
+grub-install --target=x86_64-efi --bootloader-id=GRUB --efi-directory=/boot/efi --recheck
 
 ## Create the grub configuration file
 grub-mkconfig -o /boot/grub/grub.cfg
@@ -92,9 +86,5 @@ grub-mkconfig -o /boot/grub/grub.cfg
 ## Disconnect from chroot session
 exit
 
-## Generate fstab file based on the hard drive - informations about the partitions in the hard drive
-genfstab /mnt >> /mnt/etc/fstab
-
-## Unmount the hard drive but unmount everything mounted on top of it, as the efi directory
-umount /mnt/boot/efi
-umount /mnt
+## Unmount the hard drive
+umount -R /mnt
