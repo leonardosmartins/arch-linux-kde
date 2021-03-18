@@ -1,0 +1,9 @@
+- name: Install kubectl and minikube
+  become: yes
+  pacman:
+    name:
+      - kubectl
+      - minikube
+
+- name: Install Helm
+  yay: name=helm

@@ -5,6 +5,7 @@
       - git
       - openssh
       - openvpn
+      - vpnc
       - curl
       - wget
       - jq

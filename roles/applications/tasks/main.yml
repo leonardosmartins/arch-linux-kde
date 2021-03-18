@@ -3,3 +3,4 @@
 - include: spotify.yml
 - include: visual-studio-code.yml
 - include: slack.yml
+- include: discord.yml

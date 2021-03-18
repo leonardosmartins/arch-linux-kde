@@ -1,0 +1,5 @@
+- name: Install pip
+  become: yes
+  pacman:
+    name:
+      - python-pip
